@@ -1,0 +1,19 @@
+import io.jsonwebtoken.JwsHeader;
+
+/**
+ * Created by yangjian on 2017/12/21.
+ */
+public class TokenMain {
+    public static void main(String[] args) {
+        User user=new User("Konoha","123");
+        String subject= TokenUtil.generalSubject(user);
+        String token= TokenUtil.createJWT("1",subject,30000);
+        System.out.println(token);
+//        Claims claims=TokenUtil.parseJWT(token);
+//        System.out.println(claims.getSubject());
+//        System.out.println(claims.getExpiration());
+        JwsHeader header= TokenUtil.parseJWTHeader(token);
+        System.out.println(header.getAlgorithm());
+        System.out.println(header.getKeyId());
+    }
+}
