@@ -1,0 +1,147 @@
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import java.io.IOException;
+
+/**
+ * Created by yangjian on 2017/11/13.
+ */
+
+
+
+public class main {
+
+/**
+ *利用HttpClient调用api，解析json
+ *
+ */
+//    public static void main(String[] args) {
+//        HttpClient httpClient=new DefaultHttpClient();
+//        String url="http://127.0.0.1:8080/admin/types/testProduct";
+//        HttpPost httpPost=new HttpPost(url);
+//
+//        try {
+//            httpPost.addHeader("Content-type", "application/json;charset=utf-8");
+//            httpPost.setHeader("Content-type","charset=utf-8");
+//            HttpResponse response = httpClient.execute(httpPost);
+//
+//            /**这里加上utf-8编码，默认为IOS-8859-1**/
+//            String conResult = EntityUtils.toString(response.getEntity(),"utf-8");
+//
+//
+//            ObjectMapper objectMapper=new ObjectMapper();
+//            dao value =objectMapper.readValue(conResult,dao.class);
+//
+//
+//            List<product> list=value.getData();
+//
+//            for(product i:list){
+//                System.out.println(i.getId()+" "+i.getProductName());
+//            }
+//
+//
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+
+
+    /**
+    *利用HttpClient发送json调用api
+     *
+    */
+
+//    public static void main(String[] args) {
+//        HttpClient httpClient = new DefaultHttpClient();
+//        String url = "http://127.0.0.1:8080/admin/banner/queryAllBanner";
+//        HttpPost httpPost = new HttpPost(url);
+//
+//        page mypage=new page();
+//        mypage.setCurrentPage(1);
+//        mypage.setPageSize(5);
+//
+//      String str="{\n" +
+//              "\t\"currentPage\":2,\n" +
+//              "\t\"pageSize\":5\n" +
+//              "}";
+//
+//
+//
+//        try {
+//            httpPost.addHeader("Content-type","application/json; charset=utf-8");
+//            httpPost.setHeader("Accept", "application/json");
+//            httpPost.setEntity(new StringEntity(str, Charset.forName("UTF-8")));
+//            ObjectMapper objectMapper = new ObjectMapper();
+//
+//
+//            HttpResponse response = httpClient.execute(httpPost);
+//            String conResult = EntityUtils.toString(response.getEntity());
+//
+//
+//            Object value = objectMapper.readValue(conResult, Object.class);
+//            System.out.println(value.toString());
+//
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+//
+//
+//    public static void main(String[] args) {
+//        HttpClient httpClient=new DefaultHttpClient();
+//        String url="http://127.0.0.1:8080/admin/types/testProduct";
+//        HttpPost httpPost=new HttpPost(url);
+//
+//        try {
+//            httpPost.addHeader("Content-type", "application/json; charset=utf-8");
+//            HttpResponse response = httpClient.execute(httpPost);
+//            String conResult = EntityUtils.toString(response.getEntity(),"utf-8");
+//
+//            Map map= JSON.parseObject(conResult,Map.class);
+//            String data=map.get("data").toString();
+//            List<product> list=JSON.parseArray(data,product.class);
+//
+//
+////
+//            for(product i:list){
+//                System.out.println(i.getId()+" "+i.getProductName());
+//                System.out.println(i.getRate());
+//            }
+//
+//
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+    public static void main(String[] args) throws IOException, InvalidFormatException {
+//        ExcelUtil util=new ExcelUtil();
+//        util.check("e:/phoneExample.xlsx",1,0);
+//          util.writ4W("e:/phoneExample.xlsx","手机号码样本");
+//        dao d1=new dao();
+//        d1.setError("qwe");
+//        dao d2 =new dao();
+//        d2.setError(d1.getError());
+//        d2.setStatus(d1.getStatus());
+//        System.out.println(d2.getStatus()==null);
+//
+//        util.writ("e:/mytable.xlsx","测试表");
+//        util.read("e:/qwe.xlsx");
+//        util.copy("e:/test3.xlsx","e:/newexcel.xlsx");
+
+//        DownloadFileUtil.download("http://qianlong-test.cn-sh2.ufileos.com/2017/11/24/9de04b98-dc8e-4128-9735-18823f4d4eed.xls","D:/123.xls");
+//          DownloadFileUtil.read("http://qianlong-test.cn-sh2.ufileos.com/2017/11/24/c97af190-fed5-47ac-9c47-fc9fd6e0f542.xlsx");
+
+        Integer i1= Integer.valueOf("1000");
+        Integer i2=Integer.valueOf("1000");
+        System.out.println(i1);
+    }
+
+}
