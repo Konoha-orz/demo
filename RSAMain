@@ -1,0 +1,110 @@
+import org.apache.commons.codec.binary.Base64;
+
+import javax.crypto.Cipher;
+import java.io.UnsupportedEncodingException;
+import java.security.*;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Created by yangjian on 2017/12/4.
+ */
+public class RSAMain {
+    public static final String KEY_ALGORITHM = "RSA";
+      /** 貌似默认是RSA/NONE/PKCS1Padding，未验证 */
+    public static final String CIPHER_ALGORITHM = "RSA/ECB/PKCS1Padding";
+    public static final String PUBLIC_KEY = "publicKey";
+    public static final String PRIVATE_KEY = "privateKey";
+
+    public static final int KEY_SIZE = 2048;
+
+    public static final String PLAIN_TEXT = "MANUTD is the greatest club in the world";
+
+    public static Map<String,byte[]> generatekeyBytes(){
+
+        try{
+            KeyPairGenerator keyPairGenerator= KeyPairGenerator.getInstance(KEY_ALGORITHM);
+            keyPairGenerator.initialize(KEY_SIZE);
+            KeyPair keyPair=keyPairGenerator.generateKeyPair();
+            RSAPublicKey publicKey= (RSAPublicKey) keyPair.getPublic();
+            RSAPrivateKey privateKey= (RSAPrivateKey) keyPair.getPrivate();
+            Map<String,byte[]> keyMap=new HashMap<String, byte[]>();
+            keyMap.put(PUBLIC_KEY,publicKey.getEncoded());
+            keyMap.put(PRIVATE_KEY,privateKey.getEncoded());
+            return keyMap;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static PublicKey restorePublicKey(byte[] keyBytes){
+        X509EncodedKeySpec x509EncodedKeySpec=new X509EncodedKeySpec(keyBytes);
+        try {
+            KeyFactory keyFactory=KeyFactory.getInstance(KEY_ALGORITHM);
+            PublicKey publicKey=keyFactory.generatePublic(x509EncodedKeySpec);
+            return publicKey;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static PrivateKey restorePrivateKey(byte[] keyBytes){
+        PKCS8EncodedKeySpec pkcs8EncodedKeySpec=new PKCS8EncodedKeySpec(keyBytes);
+        try{
+            KeyFactory keyFactory=KeyFactory.getInstance(KEY_ALGORITHM);
+            PrivateKey privateKey=keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+            return privateKey;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static byte[] RSAEncode(PublicKey publicKey,byte[] plainText){
+        try {
+            Cipher cipher=Cipher.getInstance(CIPHER_ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE,publicKey);
+            return cipher.doFinal(plainText);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  null;
+    }
+
+    public static String RSADecode(PrivateKey privateKey,byte[] plainText){
+        try {
+            Cipher cipher=Cipher.getInstance(CIPHER_ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE,privateKey);
+            return new String(cipher.doFinal(plainText));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  null;
+    }
+
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        Map<String,byte[]> keyMap=generatekeyBytes();
+
+        PublicKey publicKey=restorePublicKey(keyMap.get(PUBLIC_KEY));
+        System.out.println("Origin :"+PLAIN_TEXT);
+        byte[] encodeText=RSAEncode(publicKey,PLAIN_TEXT.getBytes());
+        String encodeTextStr=new String(encodeText,"utf-8");
+        System.out.println("NO 64"+encodeTextStr);
+
+        System.out.println("RSA encoded:"+ Base64.encodeBase64String(encodeText));
+
+        PrivateKey privateKey=restorePrivateKey(keyMap.get(PRIVATE_KEY));
+        System.out.println("RSA Decoded:"+RSADecode(privateKey,encodeText));
+
+    }
+
+
+
+}
