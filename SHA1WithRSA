@@ -1,0 +1,34 @@
+import java.security.*;
+
+/**
+ * Created by yangjian on 2017/12/5.
+ */
+public class SHA1WithRSA {
+
+    public static void main(String[] args) {
+        try {
+            byte[] data="Test qweqewe".getBytes();
+            KeyPairGenerator keyPairGenerator=KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            KeyPair keyPair =keyPairGenerator.genKeyPair();
+            PublicKey publicKey = keyPair.getPublic();
+            PrivateKey privateKey = keyPair.getPrivate();
+
+            Signature privateSign=Signature.getInstance("SHA1WithRSA");
+            privateSign.initSign(privateKey);
+            Signature   publicSign=Signature.getInstance("SHA1WithRSA");
+            publicSign.initVerify(publicKey);
+            publicSign.update(data);
+
+            System.out.println();
+
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+}
