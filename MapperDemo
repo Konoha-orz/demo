@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mobanker.llcs.manage.dao.CreditCardMapper">
+
+
+    <insert id="addCreditCard" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO l_credit_card
+        (product_name,product_start_time,product_end_time,card_privilege,applications,apply_inc_rate,annual_fee_policy,rate,
+        cost_of_cash,late_fees,card_level,currency,organization,card_use,preferential_privileges,coop_mode,product_label_id,
+        img_id,img_url,create_user)
+        VALUES
+        (#{productName},#{productStartTime},#{productEndTime},#{cardPrivilege},#{applications},#{applyIncRate},#{annualFeePolicy},
+        #{rate},#{costOfCash},#{lateFees},#{cardLevel},#{currency},#{organization},#{cardUse},#{preferentialPrivileges},
+        #{coopMode},#{productLabelId},#{imgId},#{imgUrl},#{createUser})
+    </insert>
+    <update id="editCreditCard" >
+        UPDATE l_credit_card
+        set product_name=#{productName},product_start_time=#{productStartTime},product_end_time=#{productEndTime},
+        card_privilege=#{cardPrivilege},applications=#{applications},apply_inc_rate=#{applyIncRate},annual_fee_policy=#{annualFeePolicy},
+        rate=#{rate},cost_of_cash=#{costOfCash},late_fees=#{lateFees},card_level=#{cardLevel},currency=#{currency},organization=#{organization},
+        card_use=#{cardUse},preferential_privileges=#{preferentialPrivileges},coop_mode=#{coopMode},product_label_id=#{productLabelId},
+        img_id=#{imgId},img_url=#{imgUrl},update_user=#{updateUser}
+        WHERE id=#{id}
+    </update>
+
+    <select id="countByProductName" parameterType="java.lang.String" resultType="java.lang.Long">
+        select count(id) from l_credit_card
+        <where>
+            product_name = #{productName}
+            <if test="id != null">
+                and id != #{id}
+            </if>
+        </where>
+    </select>
+
+    <select id="getByCreditCardId" parameterType="java.lang.Long" resultType="com.mobanker.llcs.manage.model.dto.param.CreditCardOut">
+        SELECT
+            c.id,
+            c.product_name AS productName,
+            c.product_start_time,
+            c.product_end_time,
+            c.card_privilege,
+            c.applications,
+            c.apply_inc_rate,
+            c.annual_fee_policy,
+            c.rate,
+            c.cost_of_cash,
+            c.late_fees,
+            c.card_level,
+            c.currency,
+            c.organization,
+            c.card_use,
+            c.preferential_privileges,
+            c.coop_mode,
+            l.id AS productLabelId,
+            c.img_id,
+            c.img_url
+        FROM
+            l_credit_card c LEFT JOIN l_label l ON c.product_label_id=l.id AND l.delete_flag=0
+        WHERE
+            c.id = #{id}
+    </select>
+
+    <update id="validCard">
+        UPDATE l_credit_card
+        set delete_flag=#{deleteFlag},update_user=#{updateUser} WHERE id=#{id}
+    </update>
+
+    <select id="queryCreditCarByCondition" resultType="java.util.Map">
+        SELECT
+        delete_flag as deleteFlag,id,product_end_time as productEndTime,product_name as productName,product_start_time as productStartTime
+        FROM l_credit_card
+        <where>
+            <if test="productLabelId != null and productLabelId != ''">
+                and product_label_id = #{productLabelId}
+            </if>
+            <if test="productName != null and productName != ''">
+                and product_name like  CONCAT('%',#{productName},'%')
+            </if>
+
+        </where>
+        ORDER BY delete_flag ASC,id DESC
+        limit #{offset},#{size}
+    </select>
+    <select id="countCreditCardByCondition" resultType="int">
+        SELECT
+        count(0)
+        FROM l_credit_card
+        <where>
+            <if test="productLabelId != null and productLabelId != ''">
+                and product_label_id = #{productLabelId}
+            </if>
+            <if test="productName != null and productName != ''">
+                and product_name like  CONCAT('%',#{productName},'%')
+            </if>
+
+        </where>
+    </select>
+
+
+
+</mapper>
