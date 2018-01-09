@@ -1,0 +1,149 @@
+package com.mobanker.llcs.manage.web.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.dianping.cat.message.Event;
+import com.mobanker.framework.contract.dto.ResponseEntityDto;
+import com.mobanker.framework.tracking.EE;
+import com.mobanker.llcs.manage.common.exception.MspException;
+import com.mobanker.llcs.manage.model.dto.param.CreditCardOut;
+import com.mobanker.llcs.manage.model.entity.LCreditCard;
+import com.mobanker.llcs.manage.model.enums.ErrorCodeEnum;
+import com.mobanker.llcs.manage.model.enums.ResponseEntityBuilder;
+import com.mobanker.llcs.manage.service.admin.CreditCardService;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Created by yangjian on 2017/12/28.
+ */
+
+@RestController
+@RequestMapping("admin/creditCard")
+public class CreditCardController {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CreditCardController.class);
+    @Resource
+    private CreditCardService creditCardService;
+
+    /**
+     * 新增信用卡
+     * @param creditCardOut
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseEntityDto<Object> addCreditCard(@RequestBody CreditCardOut creditCardOut, HttpServletRequest request, HttpServletResponse response) {
+        ResponseEntityDto<Object> res = new ResponseEntityDto<>();
+        try{
+            res = creditCardService.addCreditCard(creditCardOut,request, response);
+            logger.info("URL", "admin/creditCard/addCreditCard", Event.SUCCESS, "请求参数："
+                    + JSONObject.toJSONString(creditCardOut) + ",返回结果：" + res);
+        }catch (MspException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            res = ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PRODUCT_ADD_EXCEPTION);
+        }
+
+        return res;
+    }
+
+    /**
+     * 编辑信用卡
+     * @param creditCardOut
+     * @return
+     */
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseEntityDto<Object> editCreditCard(@RequestBody CreditCardOut creditCardOut, HttpServletRequest request, HttpServletResponse response) {
+        ResponseEntityDto<Object> res = new ResponseEntityDto<>();
+        try{
+            res = creditCardService.editCreditCard(creditCardOut,request, response);
+            logger.info("URL", "admin/creditCard/edit", Event.SUCCESS, "请求参数："
+                    + JSONObject.toJSONString(creditCardOut) + ",返回结果：" + res);
+        }catch (MspException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            res = ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PRODUCT_ADD_EXCEPTION);
+        }
+
+        return res;
+    }
+
+    /**
+     * 根据id查询信用卡详情
+     * @param lCreditCard
+     * @return
+     */
+    @RequestMapping(value = "/cardInfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseEntityDto<Object> cardInfo(@RequestBody LCreditCard lCreditCard) {
+        ResponseEntityDto<Object> res = new ResponseEntityDto<>();
+        if(null == lCreditCard.getId()) {
+            return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PRODUCT_ID_NULL);
+        }
+        try{
+            Object object = creditCardService.getCreditCardById(lCreditCard.getId());
+            res = ResponseEntityBuilder.buildNormalResponse(object);
+            logger.info("URL", "admin/creditCard/cardInfo", Event.SUCCESS, "请求参数："
+                    + JSONObject.toJSONString(lCreditCard) + ",返回结果：" + res);
+        }catch (MspException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            res = ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PRODUCT_ADD_EXCEPTION);
+        }
+
+        return res;
+    }
+
+    /**
+     * 信用卡上下架
+     * @param lCreditCard
+     * @return
+     */
+    @RequestMapping(value = "/validCard", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseEntityDto<Object> validCard(@RequestBody LCreditCard lCreditCard, HttpServletRequest request, HttpServletResponse response) {
+        ResponseEntityDto<Object> res = new ResponseEntityDto<>();
+        if(null == lCreditCard.getId()) {
+            return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PRODUCT_ID_NULL);
+        }
+        try{
+            res = creditCardService.validCard(lCreditCard,request,response);
+            logger.info("URL", "admin/creditCard/validCard", Event.SUCCESS, "请求参数："
+                    + JSONObject.toJSONString(lCreditCard) + ",返回结果：" + res);
+        }catch (MspException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            res = ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PRODUCT_ADD_EXCEPTION);
+        }
+
+        return res;
+    }
+
+    /**
+     * 分页查询CreditCard
+     * @param creditCardOut
+     * @return
+     */
+    @RequestMapping(value="/queryCard", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseEntityDto<Object> queryCard(@RequestBody CreditCardOut creditCardOut) {
+        if(creditCardOut.getPageSize() < 0 || creditCardOut.getCurrentPage() < 1) {
+            return ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PAGE_INFO_EXCEPTION);
+        }
+        ResponseEntityDto<Object> res = new ResponseEntityDto<>();
+        try {
+            res = ResponseEntityBuilder.buildNormalResponse(creditCardService.queryCreditCard(creditCardOut));
+            logger.info("URL", "admin/creditCard/queryCard", Event.SUCCESS, "请求参数："
+                    + JSONObject.toJSONString(creditCardOut) + ",返回结果：" + res);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            res = ResponseEntityBuilder.buildErrorResponse(ErrorCodeEnum.PRODUCT_INFO_EXCEPTION);
+            EE.logError(e);
+            logger.error(e.getMessage());
+        }
+
+        return res;
+    }
+}
