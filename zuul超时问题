@@ -1,0 +1,4 @@
+在调用服务中设置超时时长
+ribbon.ReadTimeout=5000
+ribbon.SocketTimeout=5000
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=2500
