@@ -1,0 +1,2 @@
+service-hi.ribbon.NFLoadBalancerRuleClassName=com.netflix.loadbalancer.WeightedResponseTimeRule
+service-hi为调用的服务
