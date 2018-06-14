@@ -1,0 +1,17 @@
+package com.youzi.website;
+
+import java.io.IOException;
+
+/**
+ * Created by @杨健 on 2018/6/12 20:36
+ *
+ * @Des: 替换文件夹下全部子文件字符主方法类(FolderReadUtil,ChangeFileUtil)
+ */
+
+public class FileChangeMain {
+    public static void main(String[] args) throws IOException {
+
+        FolderReadUtil my=new FolderReadUtil();
+        my.traverseFolder2("E:\\MyProject\\oupuResource\\HtmlBeiFen\\html","\t\t\t\t\t\t\t\t\t\t\t\t\t13210666060","\t\t\t\t\t\t\t\t\t\t\t\t\t13013516587、18953963507");
+    }
+}
