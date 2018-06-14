@@ -1,0 +1,36 @@
+package com.youzi.website;
+
+import java.io.File;
+import java.io.IOException;
+
+/**
+ * Created by @杨健 on 2018/6/12 20:44
+ *
+ * @Des: 文件遍历工具类
+ */
+
+public class FolderReadUtil {
+    public void traverseFolder2(String path,String srcStr,String replaceStr) throws IOException {
+        File file = new File(path);
+        if (file.exists()) {
+            File[] files = file.listFiles();
+            if (files.length == 0) {
+                System.out.println("文件夹是空的!");
+                return;
+            } else {
+                for (File file2 : files) {
+                    if (file2.isDirectory()) {
+                        System.out.println("文件夹:" + file2.getAbsolutePath());
+                        traverseFolder2(file2.getAbsolutePath(),srcStr,replaceStr);
+                    } else {
+                        System.out.println("文件:" + file2.getAbsolutePath());
+                        ChangeFileUtil.Change(srcStr,replaceStr,file2.getAbsolutePath());
+                    }
+                }
+            }
+        } else {
+            System.out.println("文件不存在!");
+        }
+
+    }
+}
