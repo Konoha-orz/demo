@@ -1,0 +1,43 @@
+package com.youzi.website;
+
+import java.util.Arrays;
+
+/**
+ * Created by @杨健 on 2018/7/6 17:08
+ *
+ * @Des: 快速排序
+ */
+public class mytest {
+    public static void main(String[] args) {
+        int[] ary=new int[]{10,3,4,2,5,6,8,7,1,9};
+        quickSort(ary);
+        System.out.println(Arrays.toString(ary));
+    }
+
+    public static void sort(int a[],int left,int right){
+        int low,hight,index;
+        if(left>right)
+            return;
+        low=left;
+        hight=right;
+        index=a[low];// 用子表的第一个记录做基准
+        while (low<hight){// 从表的两端交替向中间扫描
+            while (low<hight&&a[hight]>=index)
+                hight--;
+            if(low<hight)
+                a[low++]=a[hight];// 用比基准小的记录替换低位记录
+            while (low<hight&&a[low]<=index)
+                low++;
+            if(low<hight)
+                a[hight--]=a[low];// 用比基准大的记录替换高位记录
+        }
+        a[low]=index;// 将基准数值替换回 a[i]
+        sort(a,left,low-1);// 对低子表进行递归排序
+        sort(a,low+1,right);// 对高子表进行递归排序
+    }
+
+    public static void quickSort(int[] a){
+        sort(a,0,a.length-1);
+    }
+
+}
