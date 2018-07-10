@@ -1,0 +1,63 @@
+package com.youzi.website;
+
+import java.util.Arrays;
+
+/**
+ * Created by @杨健 on 2018/7/6 17:08
+ *
+ * @Des: 归并排序
+ */
+public class mytest {
+    public static void main(String[] args) {
+        int[] ary=new int[]{10,3,4,2,5,6,8,7,1,9};
+        mergeSort(ary,0,ary.length-1);
+        System.out.println(Arrays.toString(ary));
+    }
+
+    public static void mergeSort(int[] input, int start, int end) {
+        int middle;
+        if(start<end){//分两段
+            middle=(start+end)/2;
+            mergeSort(input,start,middle);//前段
+            mergeSort(input,middle+1,end);//后端
+            merge(input,start,middle,end);//归并前后两段
+        }
+    }
+    public static void merge(int[] input, int start, int middle, int end) {
+        int temp[]=new int[end-start+1];//临时存储数组
+        int i=start;
+        int j=middle+1;
+        int n=0;
+        while (i<=middle&&j<=end){
+            if(input[i]<input[j]){
+                temp[n]=input[i];
+                i++;
+            }else {
+                temp[n]=input[j];
+                j++;
+            }
+            n++;
+        }
+        //前或后数组全部填入，接下来填充剩下的数组
+
+
+        //给剩下的前段数组填入临时数组
+        while (i<=middle){
+            temp[n]=input[i];
+            n++;
+            i++;
+        }
+
+        //给剩下的后段数组填入临时数组
+        while (j<=end){
+            temp[n]=input[j];
+            n++;
+            j++;
+        }
+
+        //将临时数组替换掉原数组
+        for(int x=0,y=start;x<=n&&y<=end;x++,y++)
+            input[y]=temp[x];
+    }
+
+}
